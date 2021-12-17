@@ -1,6 +1,7 @@
 import { TasksService } from './tasks.service';
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { Task } from './task.model';
+import { TaskDTO } from './dto/task.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -12,10 +13,7 @@ export class TasksController {
   }
 
   @Post()
-  createNewTask(
-    @Body('title') title: string,
-    @Body('description') description: string,
-  ): Task {
-    return this.taskService.createNewTask(title, description);
+  async createNewTask(@Body() taskDto: TaskDTO): Promise<Task> {
+    return this.taskService.createNewTask(taskDto);
   }
 }
