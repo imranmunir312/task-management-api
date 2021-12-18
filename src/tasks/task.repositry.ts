@@ -1,5 +1,5 @@
-import { FilteredTaskDto } from './dto/filteredTask.dto';
 import { EntityRepository, Repository } from 'typeorm';
+import { FilteredTaskDto } from './dto/filteredTask.dto';
 import { TaskDTO } from './dto/task.dto';
 import { Task } from './task.entity';
 import { TaskStatus } from './taskStatus.enum';
