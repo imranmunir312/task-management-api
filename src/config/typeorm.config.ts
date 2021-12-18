@@ -8,4 +8,6 @@ export const TypeOrmConfig: TypeOrmModuleOptions = {
   password: 'postgres',
   database: 'taskmanagement',
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
+  synchronize: true,
+  logging: false,
 };

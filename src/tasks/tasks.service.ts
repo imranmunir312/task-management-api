@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { v1 as uuid } from 'uuid';
 import { TaskStatus } from './taskStatus.enum';
 import { TaskDTO } from './dto/task.dto';
 import { FilteredTaskDto } from './dto/filteredTask.dto';
@@ -13,27 +12,12 @@ export class TasksService {
     private taskRepositry: TaskRepositry,
   ) {}
 
-  // async getAllTasks(): Promise<Task[]> {
-  //   return this.tasks;
-  // }
-
-  // async getFilteredTasks(filters: FilteredTaskDto): Promise<Task[]> {
-  //   const { status, search } = filters;
-  //   if (status) {
-  //     return this.tasks.filter((task: Task) => task.status === status);
-  //   }
-  //   if (search) {
-  //     return this.tasks.filter(
-  //       (task: Task) =>
-  //         task.title.includes(search) || task.description.includes(search),
-  //     );
-  //   }
-
-  //   return this.tasks;
-  // }
+  async getTasks(filterTaskDto: FilteredTaskDto): Promise<Task[]> {
+    return this.taskRepositry.getTasks(filterTaskDto);
+  }
 
   async getTaskById(id: number): Promise<Task> {
-    const found = this.taskRepositry.findOne(id);
+    const found = await this.taskRepositry.findOne(id);
 
     if (!found) {
       throw new NotFoundException(`Task with id "${id}" not found`);
@@ -42,28 +26,24 @@ export class TasksService {
     return found;
   }
 
-  // async deleteTask(id: string): Promise<void> {
-  // this.tasks = this.tasks.filter((task: Task) => task.id !== id);
-  // }
+  async deleteTask(id: number): Promise<void> {
+    const result = await this.taskRepositry.delete(id);
 
-  // async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
-  //   const task = await this.getTaskById(id);
-  //   task.status = status;
-  //   return task;
-  // }
+    if (result.affected === 0) {
+      throw new NotFoundException(`Task with id "${id}" not found`);
+    }
+  }
 
-  // async createNewTask(taskDto: TaskDTO): Promise<Task> {
-  //   const { title, description } = taskDto;
+  async updateTaskStatus(id: number, status: TaskStatus): Promise<Task> {
+    const task = await this.getTaskById(id);
 
-  //   // const task: Task = {
-  //   //   id: uuid(),
-  //   //   title,
-  //   //   description,
-  //   //   status: TaskStatus.OPEN,
-  //   // };
+    task.status = status;
+    await task.save();
 
-  //   this.tasks.push(task);
+    return task;
+  }
 
-  //   return task;
-  // }
+  async createNewTask(taskDto: TaskDTO): Promise<Task> {
+    return this.taskRepositry.createNewTask(taskDto);
+  }
 }
