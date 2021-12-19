@@ -1,3 +1,4 @@
+import { User } from './user.entity';
 import {
   Body,
   Controller,
@@ -15,6 +16,12 @@ export class AuthController {
   @Post('signup')
   @UsePipes(ValidationPipe)
   async signup(@Body() credentials: CredentialsDto): Promise<void> {
-    this.authService.signup(credentials);
+    return this.authService.signup(credentials);
+  }
+
+  @Post('signin')
+  @UsePipes(ValidationPipe)
+  async signin(@Body() credentials: CredentialsDto): Promise<User> {
+    return this.authService.signin(credentials);
   }
 }

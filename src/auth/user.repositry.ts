@@ -1,4 +1,9 @@
-import { BadRequestException, ConflictException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { CredentialsDto } from './dto/credentials.dto';
 import { User } from './user.entity';
@@ -23,5 +28,24 @@ export class UserRepositry extends Repository<User> {
         throw new BadRequestException();
       }
     }
+  }
+
+  async validateUserPassword(credentials: CredentialsDto): Promise<User> {
+    const { email, password } = credentials;
+
+    const user = await this.findOne({ email });
+
+    if (!user) {
+      throw new NotFoundException('User does not exist');
+    }
+
+    if (!(await user.comparePassword(password))) {
+      throw new UnauthorizedException("User's password is incorrect");
+    }
+
+    user.password = undefined;
+    user.id = undefined;
+
+    return user;
   }
 }

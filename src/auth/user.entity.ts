@@ -5,6 +5,7 @@ import {
   Column,
   Unique,
 } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 
 @Entity()
 export class User extends BaseEntity {
@@ -17,4 +18,8 @@ export class User extends BaseEntity {
 
   @Column()
   password: string;
+
+  public comparePassword(password: string): Promise<boolean> {
+    return bcrypt.compare(password, this.password);
+  }
 }
