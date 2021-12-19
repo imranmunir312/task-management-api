@@ -1,4 +1,3 @@
-import { User } from './user.entity';
 import {
   Body,
   Controller,
@@ -21,7 +20,9 @@ export class AuthController {
 
   @Post('signin')
   @UsePipes(ValidationPipe)
-  async signin(@Body() credentials: CredentialsDto): Promise<User> {
+  async signin(
+    @Body() credentials: CredentialsDto,
+  ): Promise<{ email: string; token: string }> {
     return this.authService.signin(credentials);
   }
 }
