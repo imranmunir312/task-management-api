@@ -13,7 +13,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo "credentials ${DISPLAY_NAME}"
-                sh 'npm run test'
+                sh 'npm run test --passWithNoTests'
             }
         }
         stage('Build Docker Image') {
