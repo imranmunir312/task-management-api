@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'aws', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
-                        sh "echo $PASSWORD | docker login --username $USERNAME --password-stdin"
+                        sh "echo $PASSWORD | docker login --username $USERNAME --password-stdin $HOST"
                     }
                 }
             }
