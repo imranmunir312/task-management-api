@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo "credentials %HOST%"
+                echo "HOST: $HOST"
                 sh 'npm run test --passWithNoTests'
             }
         }
@@ -20,8 +20,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'aws', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
-                        sh "echo %PASSWORD% | docker login --username %USERNAME% --password-stdin"
-
+                        sh "echo $PASSWORD | docker login --username $USERNAME --password-stdin"
                     }
                 }
             }
