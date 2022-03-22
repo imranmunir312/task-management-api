@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DISPLAY_NAME = credentials('HOST')
+        HOST = credentials('HOST')
     }
     stages {
         stage('Build') {
@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo "credentials ${DISPLAY_NAME}"
+                echo "credentials %HOST%"
                 sh 'npm run test --passWithNoTests'
             }
         }
@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'aws', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
-                        sh "echo $PASSWORD | docker login --username $USERNAME --password-stdin"
+                        sh "echo %PASSWORD% | docker login --username %USERNAME% --password-stdin"
 
                     }
                 }
