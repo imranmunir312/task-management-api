@@ -2,10 +2,10 @@ version: '3'
 
 services:
   taskAPI:
-    image: imranmunir312/taskmanagement:1.0
+    image: 620709914666.dkr.ecr.us-east-1.amazonaws.com/task-management-api:latest
     container_name: taskAPI
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       - postgres
 
